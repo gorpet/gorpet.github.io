@@ -1,0 +1,107 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: XBMC Main Translation Project (Frodo)\n"
+"Report-Msgid-Bugs-To: http://trac.xbmc.org/\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: XBMC Translation Team\n"
+"Language-Team: English (http://www.transifex.com/projects/p/XBMC-Main-Frodo/language/en/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: en\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#English
+
+msgctxt "#32001"
+msgid "Error searching for subtitles"
+msgstr ""
+
+msgctxt "#32002"
+msgid "Username"
+msgstr ""
+
+msgctxt "#32003"
+msgid "Password"
+msgstr ""
+
+msgctxt "#32004"
+msgid "Login Details"
+msgstr ""
+
+msgctxt "#32005"
+msgid "Either username or password is empty"
+msgstr ""
+
+msgctxt "#32006"
+msgid "Unauthorized, please check your login information!"
+msgstr ""
+
+msgctxt "#32007"
+msgid "Prijevodi-online.org login error, try again"
+msgstr ""
+
+msgctxt "#32008"
+msgid "Please enter search text!"
+msgstr ""
+
+msgctxt "#32009"
+msgid "Video not playing!"
+msgstr ""
+
+msgctxt "#32010"
+msgid "Error when downloading subtitle!"
+msgstr ""
+
+msgctxt "#32011"
+msgid "Choose subtitle file"
+msgstr ""
+
+msgctxt "#32012"
+msgid "Wrong username or password"
+msgstr ""
+
+msgctxt "#32013"
+msgid "English"
+msgstr ""
+
+msgctxt "#32014"
+msgid "Serbian"
+msgstr ""
+
+msgctxt "#32015"
+msgid "Serbian (Latin)"
+msgstr ""
+
+msgctxt "#32016"
+msgid "Croatian"
+msgstr ""
+
+msgctxt "#32017"
+msgid "German"
+msgstr ""
+
+msgctxt "#32018"
+msgid "Serbo-Croatian"
+msgstr ""
+
+msgctxt "#32019"
+msgid "Bosnian"
+msgstr ""
+
+msgctxt "#32020"
+msgid "Unknown"
+msgstr ""
+
+msgctxt "#32021"
+msgid "Subtitle suitable for:"
+msgstr ""
+
+msgctxt "#32022"
+msgid "Download subtitle"
+msgstr ""
+
+msgctxt "#32023"
+msgid "Fetching UnRAR executable ..."
+msgstr ""

@@ -1,0 +1,107 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: XBMC Main Translation Project (Leia)\n"
+"Report-Msgid-Bugs-To: http://trac.xbmc.org/\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: 2020-06-01 12:09+0200\n"
+"Last-Translator: gogo <trebelnik2@gmail.com>\n"
+"Language-Team: Serbian (http://www.transifex.com/projects/p/XBMC-Main-Frodo/language/en/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: hr\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"X-Generator: Poedit 2.0.6\n"
+
+# English
+msgctxt "#32001"
+msgid "Error searching for subtitles"
+msgstr "Greška pretraživanja podnaslova"
+
+msgctxt "#32002"
+msgid "Username"
+msgstr "Korisničko ime"
+
+msgctxt "#32003"
+msgid "Password"
+msgstr "Lozinka"
+
+msgctxt "#32004"
+msgid "Login Details"
+msgstr "Pojedinosti prijave"
+
+msgctxt "#32005"
+msgid "Either username or password is empty"
+msgstr "Niste upisali korisničko ime ili lozinku"
+
+msgctxt "#32006"
+msgid "Unauthorized, please check your login information!"
+msgstr "Nemate pravo pristupa. Provjerite korisničko ime i lozinku."
+
+msgctxt "#32007"
+msgid "Prijevodi-online.org login error, try again"
+msgstr "Prijevodi-online.org greška prijave, pokušajte ponovno"
+
+msgctxt "#32008"
+msgid "Please enter search text!"
+msgstr "Upišite tekst pretrage!"
+
+msgctxt "#32009"
+msgid "Video not playing!"
+msgstr "Video se ne može reproducirati!"
+
+msgctxt "#32010"
+msgid "Error when downloading subtitle!"
+msgstr "Greška preuzimanja podnaslova!"
+
+msgctxt "#32011"
+msgid "Choose subtitle file"
+msgstr "Odaberite datoteku podnaslova"
+
+msgctxt "#32012"
+msgid "Wrong username or password"
+msgstr "Pogrešno korisničko ime ili lozinka"
+
+msgctxt "#32013"
+msgid "English"
+msgstr "engleski"
+
+msgctxt "#32014"
+msgid "Serbian"
+msgstr "srpski"
+
+msgctxt "#32015"
+msgid "Serbian (Latin)"
+msgstr "srpski (lat)"
+
+msgctxt "#32016"
+msgid "Croatian"
+msgstr "hrvatski"
+
+msgctxt "#32017"
+msgid "German"
+msgstr "njemački"
+
+msgctxt "#32018"
+msgid "Serbo-Croatian"
+msgstr "srpskohrvatski"
+
+msgctxt "#32019"
+msgid "Bosnian"
+msgstr "bosanski"
+
+msgctxt "#32020"
+msgid "Unknown"
+msgstr "nepoznat"
+
+msgctxt "#32021"
+msgid "Subtitle suitable for:"
+msgstr "Odgovarajući podnaslovi za:"
+
+msgctxt "#32022"
+msgid "Download subtitle"
+msgstr "Preuzmi podnaslov"
+
+msgctxt "#32023"
+msgid "Fetching UnRAR executable ..."
+msgstr "Preuzimanje UnRAR datoteke ..."
