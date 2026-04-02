@@ -1,6 +1,6 @@
-[submodule "service.subtitles.titlovi-cobric"]
-	path = repo/service.subtitles.titlovi-cobric
-	url = https://github.com/gorpet/service.subtitles.titlovi-cobric
-[submodule "service.subtitles.prijevodi-online-org"]
+[submodule "repo/service.subtitles.prijevodi-online-org"]
 	path = repo/service.subtitles.prijevodi-online-org
 	url = https://github.com/gorpet/service.subtitles.prijevodi-online-org
+[submodule "repo/service.subtitles.titlovi-cobric"]
+	path = repo/service.subtitles.titlovi-cobric
+	url = https://github.com/gorpet/service.subtitles.titlovi-cobric
