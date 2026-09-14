@@ -4,3 +4,6 @@
 [submodule "repo/service.subtitles.titlovi-cobric"]
 	path = repo/service.subtitles.titlovi-cobric
 	url = https://github.com/gorpet/service.subtitles.titlovi-cobric
+[submodule "repo/service.subtitles.bazarr"]
+	path = repo/service.subtitles.bazarr
+	url = https://github.com/gorpet/service.subtitles.bazarr.git
