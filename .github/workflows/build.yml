@@ -1,0 +1,98 @@
+name: Build repository
+
+on:
+  push:
+    branches: [master]
+  workflow_dispatch:
+    inputs:
+      update_submodules:
+        description: "Pull the latest commit of every add-on submodule before building"
+        type: boolean
+        default: true
+
+permissions:
+  contents: write
+
+concurrency:
+  group: build-repository
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+
+      - name: Update submodules to latest
+        if: github.event_name == 'workflow_dispatch' && inputs.update_submodules
+        run: git submodule update --remote --recursive
+
+      - name: Run repo generator
+        run: |
+          python3 _repo_generator.py 2>&1 | tee generator.log
+          if grep -qE "Excluding|An error occurred" generator.log; then
+            echo "::error::Generator reported errors (see log above)"
+            exit 1
+          fi
+          rm generator.log
+
+      - name: Warn about changed add-ons without a version bump
+        run: |
+          python3 - <<'EOF'
+          import os, zipfile
+          from xml.etree import ElementTree
+
+          IGNORE = {".git", ".github", ".gitignore", ".DS_Store", "thumbs.db", ".idea", "venv", "__pycache__"}
+          for addon in sorted(os.listdir("repo")):
+              xml_path = os.path.join("repo", addon, "addon.xml")
+              if addon == "zips" or not os.path.isfile(xml_path):
+                  continue
+              version = ElementTree.parse(xml_path).getroot().get("version")
+              zip_path = os.path.join("repo", "zips", addon, "{0}-{1}.zip".format(addon, version))
+              if not os.path.isfile(zip_path):
+                  continue
+              with zipfile.ZipFile(zip_path) as zf:
+                  zipped = {n: zf.read(n) for n in zf.namelist() if not n.endswith("/")}
+              source = {}
+              for root, dirs, files in os.walk(os.path.join("repo", addon)):
+                  dirs[:] = [d for d in dirs if d not in IGNORE]
+                  for name in files:
+                      if name in IGNORE or name.endswith(".pyc"):
+                          continue
+                      path = os.path.join(root, name)
+                      arcname = os.path.relpath(path, "repo").replace(os.sep, "/")
+                      with open(path, "rb") as f:
+                          source[arcname] = f.read()
+              if source != zipped:
+                  print("::warning file={0}::{1} sources differ from {2} - bump the version in addon.xml to publish them"
+                        .format(xml_path, addon, os.path.basename(zip_path)))
+          EOF
+
+      - name: Publish repository zip at site root
+        run: |
+          version=$(python3 -c "from xml.etree import ElementTree as E; print(E.parse('repo/repository.cobric/addon.xml').getroot().get('version'))")
+          zip="repository.cobric-${version}.zip"
+          if [ ! -f "$zip" ]; then
+            git rm -q --ignore-unmatch repository.cobric-*.zip
+            cp "repo/zips/repository.cobric/${zip}" .
+          fi
+          printf '<!DOCTYPE html>\n<a href="%s">%s</a>\n' "$zip" "$zip" > index.html
+
+      - name: Commit build output
+        run: |
+          git add -A
+          if git diff --cached --quiet; then
+            echo "Nothing to commit"
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -m "chore: build repository [skip ci]"
+          git push

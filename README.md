@@ -25,13 +25,11 @@ Kodi add-on repository (`repository.cobric`) hosted on GitHub Pages at https://g
 
 ## Releasing an add-on update
 
-```sh
-git submodule update --remote          # pull latest add-on sources
-# bump version="..." in the add-on's addon.xml (the generator skips unchanged versions)
-python3 _repo_generator.py              # builds zips, updates addons.xml + md5
-git add -A && git commit && git push
-```
+1. Push the change to the add-on's own repo, with a bumped `version="..."` in its `addon.xml` (the generator skips versions it has already built).
+2. Either bump the submodule here (`git submodule update --remote && git commit -am "..." && git push`), or run the **Build repository** workflow from the Actions tab, which pulls every submodule to its latest commit.
 
-When the repository add-on itself changes, bump its version in `repo/repository.cobric/addon.xml`, then copy the new zip from `repo/zips/repository.cobric/` to the root and update the link in `index.html`.
+The [Build repository](.github/workflows/build.yml) workflow runs on every push to `master`. It runs `_repo_generator.py`, keeps the root `repository.cobric-x.y.z.zip` and `index.html` in sync with the repository add-on's version, and commits the output back. It fails if the generator reports an error, and warns when an add-on's sources changed without a version bump.
+
+To build locally instead: `python3 _repo_generator.py`.
 
 Based on [drinfernoo/repository.example](https://github.com/drinfernoo/repository.example).
