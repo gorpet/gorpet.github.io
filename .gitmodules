@@ -7,3 +7,7 @@
 [submodule "repo/service.subtitles.bazarr"]
 	path = repo/service.subtitles.bazarr
 	url = https://github.com/gorpet/service.subtitles.bazarr.git
+[submodule "vendor/fentasticplus"]
+	path = vendor/fentasticplus
+	url = https://github.com/Zaxxon709/fentasticplus
+	branch = main

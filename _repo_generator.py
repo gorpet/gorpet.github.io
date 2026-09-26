@@ -6,6 +6,7 @@
 
 import hashlib
 import os
+import re
 import shutil
 import sys
 import zipfile
@@ -23,6 +24,11 @@ IGNORE = [
     ".idea",
     "venv",
 ]
+# Folders of prebuilt add-on zips (e.g. third-party submodules) to publish
+# as-is, keyed by release. The newest version of each add-on id is used.
+PREBUILT = {
+    "repo": ["vendor/fentasticplus"],
+}
 _COLOR_ESCAPE = "\x1b[{}m"
 _COLORS = {
     "black": "30",
@@ -119,6 +125,17 @@ def color_text(text, color):
         if _SUPPORTS_COLOR
         else text
     )
+
+
+def version_key(version):
+    """
+    Sort key for add-on versions: digit runs compare numerically, so
+    100.0.33 < 100.0.33a < 100.0.34.
+    """
+    return [
+        (0, int(part), "") if part.isdigit() else (1, 0, part)
+        for part in re.findall(r"\d+|\D+", version)
+    ]
 
 
 def convert_bytes(num):
@@ -292,8 +309,7 @@ class Generator:
             and os.path.exists(os.path.join(self.release_path, i, "addon.xml"))
         ]
 
-        addon_xpath = "addon[@id='{}']"
-        changed = False
+        changed = self._import_prebuilt(addons_root)
         for addon in folders:
             try:
                 addon_xml_path = os.path.join(self.release_path, addon, "addon.xml")
@@ -302,20 +318,8 @@ class Generator:
                 id = addon_root.get('id')
                 version = addon_root.get('version')
 
-                updated = False
-                addon_entry = addons_root.find(addon_xpath.format(id))
-                if addon_entry is not None and addon_entry.get('version') != version:
-                    index = addons_root.findall('addon').index(addon_entry)
-                    addons_root.remove(addon_entry)
-                    addons_root.insert(index, addon_root)
-                    updated = True
+                if self._update_entry(addons_root, addon_root):
                     changed = True
-                elif addon_entry is None:
-                    addons_root.append(addon_root)
-                    updated = True
-                    changed = True
-
-                if updated:
                     # Create the zip files
                     self._create_zip(addon, id, version)
                     self._copy_meta_files(addon, os.path.join(self.zips_path, id))
@@ -340,6 +344,101 @@ class Generator:
                         color_text(addons_xml_path, 'yellow'), color_text(e, 'red')
                     )
                 )
+
+    def _update_entry(self, addons_root, addon_root):
+        """
+        Adds or replaces the addons.xml entry for an add-on. Returns True if
+        the entry was missing or had a different version.
+        """
+        addon_entry = addons_root.find("addon[@id='{}']".format(addon_root.get('id')))
+        if addon_entry is None:
+            addons_root.append(addon_root)
+            return True
+        if addon_entry.get('version') != addon_root.get('version'):
+            index = addons_root.findall('addon').index(addon_entry)
+            addons_root.remove(addon_entry)
+            addons_root.insert(index, addon_root)
+            return True
+        return False
+
+    def _import_prebuilt(self, addons_root):
+        """
+        Publishes the newest zip of each add-on found in this release's
+        PREBUILT folders, copying the zip unchanged along with its addon.xml
+        and art files.
+        """
+        newest = {}
+        for folder in PREBUILT.get(os.path.basename(os.path.normpath(self.release_path)), []):
+            if not os.path.isdir(folder):
+                print("Excluding {}: {}".format(
+                    color_text(folder, 'yellow'), color_text("folder not found", 'red')))
+                continue
+            for name in sorted(os.listdir(folder)):
+                if not name.endswith(".zip"):
+                    continue
+                path = os.path.join(folder, name)
+                try:
+                    with zipfile.ZipFile(path) as zf:
+                        xml_name = next(n for n in zf.namelist()
+                                        if n.count("/") == 1 and n.endswith("/addon.xml"))
+                        addon_root = ElementTree.fromstring(zf.read(xml_name))
+                    id = addon_root.get('id')
+                    version = addon_root.get('version')
+                    if xml_name.split("/")[0] != id:
+                        raise ValueError("zip folder does not match add-on id {}".format(id))
+                    if id not in newest or version_key(version) > version_key(newest[id][1].get('version')):
+                        newest[id] = (path, addon_root)
+                except Exception as e:
+                    print("Excluding {}: {}".format(color_text(path, 'yellow'), color_text(e, 'red')))
+
+        changed = False
+        for id, (path, addon_root) in sorted(newest.items()):
+            version = addon_root.get('version')
+            zip_folder = os.path.join(self.zips_path, id)
+            final_zip = os.path.join(zip_folder, "{0}-{1}.zip".format(id, version))
+            if not self._update_entry(addons_root, addon_root) and os.path.exists(final_zip):
+                continue
+            changed = True
+            if not os.path.exists(zip_folder):
+                os.makedirs(zip_folder)
+            shutil.copy(path, final_zip)
+            self._copy_prebuilt_meta_files(final_zip, addon_root, zip_folder)
+            print(
+                "Zip imported for {} ({}) - {}".format(
+                    color_text(id, 'cyan'),
+                    color_text(version, 'green'),
+                    color_text(convert_bytes(os.path.getsize(final_zip)), 'yellow'),
+                )
+            )
+        return changed
+
+    def _copy_prebuilt_meta_files(self, zip_path, addon_root, addon_folder):
+        """
+        Extracts the addon.xml and art files of a prebuilt zip into the
+        add-on's folder in the repository.
+        """
+        copyfiles = ["addon.xml"]
+        for ext in addon_root.findall("extension"):
+            if ext.get("point") in ["xbmc.addon.metadata", "kodi.addon.metadata"]:
+                assets = ext.find("assets")
+                if assets is None:
+                    continue
+                copyfiles.extend(a.text.strip() for a in assets if a.text and a.text.strip())
+
+        id = addon_root.get('id')
+        with zipfile.ZipFile(zip_path) as zf:
+            names = set(zf.namelist())
+            for file in copyfiles:
+                member = "{}/{}".format(id, file.replace(os.sep, "/"))
+                if member not in names:
+                    continue
+                target = os.path.join(addon_folder, os.path.normpath(file))
+                if not os.path.abspath(target).startswith(os.path.abspath(addon_folder) + os.sep):
+                    continue
+                if not os.path.exists(os.path.dirname(target)):
+                    os.makedirs(os.path.dirname(target))
+                with open(target, "wb") as f:
+                    f.write(zf.read(member))
 
     def _generate_md5_file(self, addons_xml_path, md5_path):
         """

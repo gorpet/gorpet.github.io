@@ -3,6 +3,9 @@ name: Build repository
 on:
   push:
     branches: [master]
+  schedule:
+    # Daily check for new third-party releases (vendor/ submodules)
+    - cron: "17 4 * * *"
   workflow_dispatch:
     inputs:
       update_submodules:
@@ -33,6 +36,10 @@ jobs:
       - name: Update submodules to latest
         if: github.event_name == 'workflow_dispatch' && inputs.update_submodules
         run: git submodule update --remote --recursive
+
+      - name: Update third-party submodules to latest
+        if: github.event_name == 'schedule'
+        run: git submodule update --remote --recursive vendor/
 
       - name: Run repo generator
         run: |
