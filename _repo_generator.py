@@ -25,9 +25,13 @@ IGNORE = [
     "venv",
 ]
 # Folders of prebuilt add-on zips (e.g. third-party submodules) to publish
-# as-is, keyed by release. The newest version of each add-on id is used.
+# as-is, keyed by release. Subfolders are searched too, and the newest version
+# of each add-on id is used.
 PREBUILT = {
-    "repo": ["vendor/fentasticplus"],
+    "repo": [
+        "vendor/fentasticplus",
+        "vendor/repository.addonniss/zips/repository.addonniss",
+    ],
 }
 _COLOR_ESCAPE = "\x1b[{}m"
 _COLORS = {
@@ -373,10 +377,11 @@ class Generator:
                 print("Excluding {}: {}".format(
                     color_text(folder, 'yellow'), color_text("folder not found", 'red')))
                 continue
-            for name in sorted(os.listdir(folder)):
-                if not name.endswith(".zip"):
-                    continue
-                path = os.path.join(folder, name)
+            paths = []
+            for root, dirs, files in os.walk(folder):
+                dirs[:] = [d for d in dirs if not d.startswith(".")]
+                paths.extend(os.path.join(root, f) for f in files if f.endswith(".zip"))
+            for path in sorted(paths):
                 try:
                     with zipfile.ZipFile(path) as zf:
                         xml_name = next(n for n in zf.namelist()
@@ -417,7 +422,8 @@ class Generator:
         Extracts the addon.xml and art files of a prebuilt zip into the
         add-on's folder in the repository.
         """
-        copyfiles = ["addon.xml"]
+        # Without an <assets> element Kodi falls back to icon.png and fanart.jpg
+        copyfiles = ["addon.xml", "icon.png", "fanart.jpg"]
         for ext in addon_root.findall("extension"):
             if ext.get("point") in ["xbmc.addon.metadata", "kodi.addon.metadata"]:
                 assets = ext.find("assets")

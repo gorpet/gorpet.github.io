@@ -11,3 +11,7 @@
 	path = vendor/fentasticplus
 	url = https://github.com/Zaxxon709/fentasticplus
 	branch = main
+[submodule "vendor/repository.addonniss"]
+	path = vendor/repository.addonniss
+	url = https://github.com/Addonniss/repository.addonniss
+	branch = main

@@ -17,12 +17,13 @@ Kodi add-on repository (`repository.cobric`) hosted on GitHub Pages at https://g
 | [`service.subtitles.bazarr`](https://github.com/gorpet/service.subtitles.bazarr) | Subtitles via your own Bazarr server |
 | [`skin.fentastic`](https://github.com/Zaxxon709/fentasticplus) | FENtastic Plus skin (third-party, by Zaxxon709) |
 | [`script.fentastic.helper`](https://github.com/Zaxxon709/fentasticplus) | Helper for the FENtastic Plus skin (third-party, by Zaxxon709) |
+| [`repository.addonniss`](https://github.com/Addonniss/repository.addonniss) | Addonniss Repository (third-party) – install it, then get Translatarr, Skip.Intro.Next and KodiARR Instant from it |
 
 ## Layout
 
 - `repo/repository.cobric/` – the repository add-on itself
 - `repo/service.subtitles.*` – add-on sources, as git submodules
-- `vendor/fentasticplus` – third-party prebuilt add-on zips, as a git submodule (listed in `PREBUILT` in `_repo_generator.py`)
+- `vendor/` – third-party repos with prebuilt add-on zips, as git submodules (`fentasticplus`, `repository.addonniss`; the zip folders to publish are listed in `PREBUILT` in `_repo_generator.py`)
 - `repo/zips/` – generated output that Kodi reads (`addons.xml`, `addons.xml.md5`, per-add-on zips)
 - `repository.cobric-x.y.z.zip` + `index.html` – the installable repository zip linked from the Pages site
 
@@ -37,6 +38,6 @@ To build locally instead: `python3 _repo_generator.py`.
 
 ## Third-party add-ons
 
-Add-ons from `vendor/` are published from their upstream release zips as-is: the generator copies the newest zip of each add-on id into `repo/zips/` and adds it to `addons.xml`. The workflow runs daily and pulls the `vendor/` submodules to their latest commit, so new upstream releases are published automatically. To add another, `git submodule add <url> vendor/<name>` and list the folder in `PREBUILT`.
+Add-ons from `vendor/` are published from their upstream release zips as-is: the generator copies the newest zip of each add-on id (searching subfolders) into `repo/zips/` and adds it to `addons.xml`. The workflow runs daily and pulls the `vendor/` submodules to their latest commit, so new upstream releases are published automatically. To add another, `git submodule add <url> vendor/<name>` and list the folder in `PREBUILT`.
 
 Based on [drinfernoo/repository.example](https://github.com/drinfernoo/repository.example).
