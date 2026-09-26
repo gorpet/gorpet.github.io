@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='utf-8'?>
-<addons><addon id="repository.cobric" name="Cobric's Kodi repository" version="1.0.0" provider-name="gorpet">
-    <extension point="xbmc.addon.repository" name="Example Repository">
+<addons><addon id="repository.cobric" name="Cobric's Kodi repository" version="1.0.1" provider-name="gorpet">
+    <extension point="xbmc.addon.repository" name="Cobric's Kodi repository">
         <dir>
             <info compressed="false">https://raw.githubusercontent.com/gorpet/gorpet.github.io/master/repo/zips/addons.xml</info>
             <checksum>https://raw.githubusercontent.com/gorpet/gorpet.github.io/master/repo/zips/addons.xml.md5</checksum>
@@ -17,7 +17,7 @@
             <fanart>fanart.jpg</fanart>
         </assets>
     </extension>
-</addon><addon id="service.subtitles.bazarr" name="Bazarr" version="0.1.0" provider-name="gorpet">
+</addon><addon id="service.subtitles.bazarr" name="Bazarr" version="0.1.1" provider-name="gorpet">
   <requires>
     <import addon="xbmc.python" version="3.0.0" />
     <import addon="script.module.requests" version="2.9.1" />
@@ -30,6 +30,10 @@
     <description lang="en_GB">Searches and downloads subtitles by delegating to an existing Bazarr instance instead of scraping subtitle sites directly. Bazarr does the provider work server-side; this addon just asks it for results and tells it what to download. Requires the currently playing movie/episode to already be indexed in Bazarr via Radarr/Sonarr, and requires Kodi and Bazarr to see the media files at the same path (shared mount).</description>
     <platform>all</platform>
     <license>GPL-3.0-only</license>
+    <assets>
+      <icon>resources/media/icon.png</icon>
+      <fanart>resources/media/fanart.jpg</fanart>
+    </assets>
     <source>https://github.com/gorpet/service.subtitles.bazarr</source>
   </extension>
 </addon><addon id="service.subtitles.prijevodi-online-org" name="Prijevodi-online.org" version="0.2" provider-name="prijevodi-online.org">
