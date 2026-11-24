@@ -14,6 +14,7 @@ Kodi add-on repository (`repository.cobric`) hosted on GitHub Pages at https://g
 |---|---|
 | [`service.subtitles.titlovi-cobric`](https://github.com/gorpet/service.subtitles.titlovi-cobric) | Subtitles from Titlovi.com |
 | [`service.subtitles.prijevodi-online-org`](https://github.com/gorpet/service.subtitles.prijevodi-online-org) | Subtitles from Prijevodi-online.org (requires an account) |
+| [`service.subtitles.holyarrs`](https://github.com/gorpet/service.subtitles.holyarrs) | Subtitles from your own HolyArrs server |
 | [`service.subtitles.bazarr`](https://github.com/gorpet/service.subtitles.bazarr) | Subtitles via your own Bazarr server |
 | [`skin.fentastic`](https://github.com/Zaxxon709/fentasticplus) | FENtastic Plus skin (third-party, by Zaxxon709) |
 | [`script.fentastic.helper`](https://github.com/Zaxxon709/fentasticplus) | Helper for the FENtastic Plus skin (third-party, by Zaxxon709) |

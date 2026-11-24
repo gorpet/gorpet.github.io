@@ -15,3 +15,6 @@
 	path = vendor/repository.addonniss
 	url = https://github.com/Addonniss/repository.addonniss
 	branch = main
+[submodule "repo/service.subtitles.holyarrs"]
+	path = repo/service.subtitles.holyarrs
+	url = https://github.com/gorpet/service.subtitles.holyarrs.git
