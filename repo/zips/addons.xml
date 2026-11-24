@@ -54,7 +54,7 @@
         <description lang="en_NZ">Helper for the FENtastic Plus Skin. Based on Fentastic Helper v0.6.20a.</description>
         <description lang="en_US">Helper for the FENtastic Plus Skin. Based on Fentastic Helper v0.6.20a.</description>
     </extension>
-</addon><addon id="service.subtitles.bazarr" name="Bazarr" version="0.2.0" provider-name="gorpet">
+</addon><addon id="service.subtitles.bazarr" name="Bazarr" version="0.2.1" provider-name="gorpet">
   <requires>
     <import addon="xbmc.python" version="3.0.0" />
     <import addon="script.module.requests" version="2.9.1" />
